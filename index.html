@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta name="google-site-verification" content="zeF0W6OCIejQBjcR6Qs7SiS6_PvxL1hpspWO5NS2PAg" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Smart Insights with Historical Stock Data</title>
+  <!-- Simple, modern CSS for good UI/UX -->
+  <style>
+    :root{
+      --accent: #6F5EBD;
+      --accent-contrast: #ffffff;
+      --card-bg: #ffffff;
+      --muted: #6b7280;
+      --page-bg: #f6f7fb;
+      --max-width: 1100px;
+      --radius: 14px;
+      --shadow: 0 6px 18px rgba(34,41,47,0.08);
+    }
+
+    *{box-sizing:border-box;}
+    html,body{height:100%;}
+    body{
+      margin:0;
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background:linear-gradient(180deg, var(--page-bg), #f3f5fb 60%);
+      color:#111827;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.55;
+      padding:32px 16px;
+      display:flex;
+      justify-content:center;
+    }
+
+    .container{
+      width:100%;
+      max-width:var(--max-width);
+    }
+
+    /* Header */
+    header.site-header{
+      background:var(--accent);
+      color:var(--accent-contrast);
+      border-radius:var(--radius);
+      padding:20px 24px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      box-shadow: 0 8px 28px rgba(111,94,189,0.16);
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      text-decoration:none;
+      color:var(--accent-contrast);
+    }
+    .logo {
+      width:48px;height:48px;border-radius:10px;
+      background:linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
+      display:flex;align-items:center;justify-content:center;font-weight:700;
+      box-shadow: inset 0 -4px 10px rgba(0,0,0,0.06);
+      font-size:18px;
+    }
+    h1.site-title{font-size:18px;margin:0;}
+    nav.site-nav{display:flex;gap:12px;align-items:center;}
+    nav.site-nav a{
+      color:var(--accent-contrast);
+      text-decoration:none;
+      font-weight:600;
+      padding:8px 12px;
+      border-radius:10px;
+      transition:background .18s, transform .12s;
+      font-size:14px;
+    }
+    nav.site-nav a:hover{background: rgba(255,255,255,0.06); transform:translateY(-1px);}
+
+    /* Hero / intro */
+    .hero{
+      margin-top:18px;
+      display:flex;
+      gap:20px;
+      align-items:flex-start;
+    }
+    .hero .intro{
+      flex:1;
+      background:linear-gradient(180deg, #fff, #fbfbff);
+      padding:22px;
+      border-radius:12px;
+      box-shadow:var(--shadow);
+      border:1px solid rgba(17,24,39,0.03);
+    }
+    .hero .cta {
+      min-width:240px;
+      background:linear-gradient(180deg, rgba(111,94,189,0.06), rgba(111,94,189,0.02));
+      padding:18px;
+      border-radius:12px;
+      box-shadow:var(--shadow);
+      border:1px solid rgba(111,94,189,0.06);
+      text-align:center;
+    }
+    .small-meta{font-size:13px;color:var(--muted);margin-bottom:8px;}
+    .lead{font-size:16px;margin:0 0 12px 0;color:#111827;}
+    .jump-link{
+      display:inline-block;
+      margin-top:10px;
+      background:var(--accent);
+      color:var(--accent-contrast);
+      padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:600;
+      box-shadow: 0 8px 18px rgba(111,94,189,0.12);
+    }
+
+    /* Cards */
+    .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:18px;}
+    .card{
+      background:var(--card-bg);
+      padding:18px;border-radius:12px;box-shadow:var(--shadow);
+      border:1px solid rgba(17,24,39,0.03);
+    }
+    .card h2{color:#000;margin:0 0 10px 0;font-size:18px;}
+    .card p{color:#1f2937;margin:0 0 10px 0;}
+    .list{padding-left:18px;margin:8px 0;color:#111827;}
+    .list li{margin:8px 0;}
+
+    /* Full width single column area */
+    .full-width{
+      margin-top:20px;
+      display:block;
+    }
+    .content-section{
+      background:var(--card-bg);
+      padding:20px;border-radius:12px;box-shadow:var(--shadow);
+      border:1px solid rgba(17,24,39,0.03);
+      margin-bottom:14px;
+    }
+
+    /* Specific first paragraph anchor styling */
+    .content-section p#nasdaq-historical-data{
+      background:linear-gradient(90deg, rgba(111,94,189,0.04), rgba(111,94,189,0.02));
+      padding:14px;border-radius:10px;border:1px dashed rgba(111,94,189,0.12);
+      color:#111827;margin:0 0 12px 0;
+    }
+    /* ensure headings inside content are black */
+    .content-section h3{color:#000;margin-top:0;}
+
+    /* Footer */
+    footer.site-footer{
+      margin-top:30px;
+      padding:20px;border-radius:12px;background:linear-gradient(180deg,#fff,#fbfbff);
+      display:flex;justify-content:space-between;align-items:center;gap:12px;
+      box-shadow: 0 6px 20px rgba(17,24,39,0.04);
+      border:1px solid rgba(17,24,39,0.03);
+    }
+    .footer-left{color:var(--muted);font-size:14px;}
+    .footer-right a{color:var(--accent);text-decoration:none;font-weight:600;}
+
+    /* Responsive */
+    @media (max-width:900px){
+      .cards{grid-template-columns:1fr;}
+      .hero{flex-direction:column;}
+      nav.site-nav{display:none;}
+    }
+    @media (max-width:420px){
+      body{padding:18px 12px;}
+      .logo{width:44px;height:44px;font-size:16px;}
+    }
+
+    /* subtle utilities */
+    .muted{color:var(--muted);}
+    .kicker{font-size:12px;letter-spacing:0.6px;text-transform:uppercase;color:var(--muted);font-weight:700}
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Header -->
+    <header class="site-header" role="banner" aria-label="Site header">
+      <a class="brand" href="#" aria-label="Finjovi homepage">
+        <div class="logo">FJ</div>
+        <div>
+          <h1 class="site-title">Smart Insights with Historical Stock Data</h1>
+          <div class="muted" style="font-size:12px;">Historical & real-time stock analysis</div>
+        </div>
+      </a>
+
+      <nav class="site-nav" role="navigation" aria-label="Primary">
+        <!-- jump link to the first paragraph anchor -->
+        <a href="#nasdaq-historical-data">Jump to Nasdaq Data</a>
+        <a href="#real-time">Real-Time Compare</a>
+        <a href="#analysis">Comprehensive Analysis</a>
+      </nav>
+    </header>
+
+    <!-- Hero / Intro -->
+    <section class="hero" aria-labelledby="overview-heading">
+      <div class="intro" id="overview-heading">
+        <!-- FIRST PARAGRAPH WITH ANCHOR (id: nasdaq-historical-data) -->
+        <p id="nasdaq-historical-data">
+          When it comes to making smarter financial decisions, having the right data at the right time makes all the difference. Historical stock data, such as <a href="https://www.finjovi.com/">nasdaq historical data</a>, helps investors see the bigger picture and understand how a company has performed over time. With 20 years of comprehensive data, you can look at trends, spot opportunities, and reduce guesswork.
+        </p>
+        <a class="jump-link" href="#analysis">See detailed analysis ↓</a>
+      </div>
+
+      <aside class="cta" aria-labelledby="cta-title">
+        <h3 id="cta-title" style="margin:0 0 8px 0;">Fast Actions</h3>
+        <p class="small-meta">Instant comparisons & visualizations</p>
+        <div style="font-weight:700;font-size:22px;margin:10px 0;">Compare Now</div>
+        <div style="font-size:13px;color:var(--muted);">Check Apple, Microsoft, Tesla and more in moments.</div>
+      </aside>
+    </section>
+    <!-- Cards summarizing sections -->
+    <section class="cards" aria-label="Key features">
+      <article class="card" id="why-historical">
+        <h2>Why historical stock data matters</h2>
+        <ul class="list">
+          <li>Shows long-term growth patterns</li>
+          <li>Highlights periods of stability and volatility</li>
+          <li>Helps compare different companies across industries</li>
+          <li>Builds confidence in your investment research</li>
+        </ul>
+      </article>
+
+      <article class="card" id="real-time">
+        <h2>Real-Time Stock Comparisons Made Easy</h2>
+        <p>Instantly compare top companies across sectors with interactive charts and visual insights.</p>
+        <p class="muted" style="margin-top:8px;font-size:13px;">Benefits:</p>
+        <ul class="list">
+          <li>Immediate insights into price changes</li>
+          <li>Visual charts that make trends easy to understand</li>
+          <li>Quick sector comparisons like tech, healthcare, or telecom</li>
+          <li>No extra input required - see curated comparisons instantly</li>
+        </ul>
+      </article>
+    </section>
+
+    <!-- Larger content sections -->
+    <main class="full-width" id="analysis" role="main" aria-labelledby="analysis-heading">
+      <section class="content-section" aria-label="Comprehensive analysis">
+        <h3 id="analysis-heading">Comprehensive Stock Analysis for Every Investor</h3>
+        <p>Description: Detailed financial insights, performance metrics, and comparisons to guide informed investments.</p>
+
+        <p>Stock analysis isn’t just for professionals anymore. With tools that combine historical data and modern visualization, every investor can access easy-to-read insights.</p>
+
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;">
+          <div style="flex:1;min-width:220px;">
+            <div style="background:#fff;padding:12px;border-radius:10px;border:1px solid rgba(17,24,39,0.04);box-shadow:0 8px 18px rgba(17,24,39,0.04)">
+              <strong>Key features</strong>
+              <ul class="list" style="margin-top:8px;">
+                <li>Monthly historical data across 20 years</li>
+                <li>Professional-grade metrics simplified for easy use</li>
+                <li>Sector-based comparisons like Tech Titans, Brands, Essential Goods</li>
+                <li>Data presented in both tables and interactive charts</li>
+              </ul>
+            </div>
+          </div>
+
+          <div style="flex:1;min-width:220px;">
+            <div style="background:#fff;padding:12px;border-radius:10px;border:1px solid rgba(17,24,39,0.04);box-shadow:0 8px 18px rgba(17,24,39,0.04)">
+              <strong>Example use cases</strong>
+              <ul class="list" style="margin-top:8px;">
+                <li>Compare GE, Honeywell, and 3M to spot industrial trends</li>
+                <li>Analyze Coca-Cola, Walmart, and P&G for essential goods resilience</li>
+                <li>Track tech leaders like Apple and Microsoft across decades</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <p style="margin-top:14px;">Comprehensive analysis transforms complex numbers into practical knowledge that every investor can act on.</p>
+      </section>
+
+      <section class="content-section" aria-label="Make confident decisions">
+        <h3>Make Confident Investment Decisions with Finjovi</h3>
+        <p>Description: Power your portfolio with easy-to-understand data and expert-driven insights.</p>
+
+        <p>Confidence in investing comes from knowledge. With tools like Finjovi, you don’t just see raw numbers - you get meaningful insights that <a href="https://finjovi.netlify.app">help</a> you act wisely.</p>
+
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;">
+          <div style="flex:1;min-width:200px;">
+            <div style="padding:12px;border-radius:10px;border:1px solid rgba(17,24,39,0.03);background:linear-gradient(180deg,#fff,#fbfbff);box-shadow:0 8px 18px rgba(17,24,39,0.04)">
+              <strong>Why choose this platform?</strong>
+              <ul class="list" style="margin-top:8px;">
+                <li>Long-term data for 20+ years</li>
+                <li>Ready-made stock comparisons (Apple vs Adobe, Airbnb vs Illumina, etc.)</li>
+                <li>Clear visualizations to simplify research</li>
+                <li>Insights trusted by analysts and individual investors</li>
+              </ul>
+            </div>
+          </div>
+
+          <div style="flex:1;min-width:200px;">
+            <div style="padding:12px;border-radius:10px;border:1px solid rgba(17,24,39,0.03);background:linear-gradient(180deg,#fff,#fbfbff);box-shadow:0 8px 18px rgba(17,24,39,0.04)">
+              <strong>Short summary</strong>
+              <p style="margin:8px 0 0 0;">
+                Reliable data = smarter choices<br/>
+                Comparisons = quicker decisions<br/>
+                Insights = better outcomes
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <p style="margin-top:14px;">With the right tools, investing becomes less stressful and more rewarding.</p>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer" role="contentinfo">
+      <div class="footer-left">
+        <div style="font-weight:700">Finjovi</div>
+        <div style="margin-top:6px;">Trusted market insights • Built for curious investors</div>
+      </div>
+      <div class="footer-right">
+        <div class="muted">Want more? <a href="#overview-heading">Explore features</a></div>
+      </div>
+    </footer>
+
+  </div>
+</body>
+</html>
